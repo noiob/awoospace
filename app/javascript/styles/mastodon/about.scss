@@ -708,7 +708,6 @@ $small-breakpoint: 960px;
   }
 
   .hero-widget {
-    margin-top: 30px;
     margin-bottom: 0;
 
     h4 {
@@ -863,6 +862,10 @@ $small-breakpoint: 960px;
 .brand {
   position: relative;
   text-decoration: none;
+  font-size: 45px;
+  font-weight: 500;
+  color: #fff;
+  font-family: "mastodon-font-sans-serif",sans-serif;
 }
 
 .brand__tagline {
