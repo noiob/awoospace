@@ -86,7 +86,7 @@
   "compose_form.poll.duration": "Poll duration",
   "compose_form.poll.option_placeholder": "Choice {number}",
   "compose_form.poll.remove_option": "Remove this choice",
-  "compose_form.publish": "Toot",
+  "compose_form.publish": "Awoo",
   "compose_form.publish_loud": "{publish}!",
   "compose_form.sensitive.hide": "Mark media as sensitive",
   "compose_form.sensitive.marked": "Media is marked as sensitive",
