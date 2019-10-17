@@ -4,8 +4,6 @@ class ActivityPub::ClaimsController < ActivityPub::BaseController
   include SignatureVerification
   include AccountOwnedConcern
 
-  skip_before_action :authenticate_user!
-
   before_action :require_signature!
   before_action :set_claim_result
 
