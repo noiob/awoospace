@@ -1,0 +1,8 @@
+{
+  "compose_form.publish": "Awoo",
+  "notification.favourite": "{name} booped your snoot",
+  "notification.follow": "{name} is following your pack",
+  "notification.mention": "{name} awooed at you",
+  "notification.reblog": "{name} joined your howl",
+  "notifications.clear": "Clear notifications"
+}
