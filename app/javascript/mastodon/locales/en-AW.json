@@ -1,0 +1,12 @@
+{
+  "compose_form.publish": "Awoo",
+  "privacy.direct.short": "Direct",
+  "privacy.private.short": "Followers-only",
+  "privacy.public.short": "Public",
+  "privacy.unlisted.short": "Unlisted",
+  "notification.favourite": "{name} booped your snoot",
+  "notification.follow": "{name} is following your pack",
+  "notification.mention": "{name} awooed at you",
+  "notification.reblog": "{name} joined your howl",
+  "notifications.clear": "Clear notifications"
+}
