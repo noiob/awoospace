@@ -710,7 +710,6 @@ $small-breakpoint: 960px;
   }
 
   .hero-widget {
-    margin-top: 30px;
     margin-bottom: 0;
 
     h4 {
@@ -866,6 +865,10 @@ $small-breakpoint: 960px;
 .brand {
   position: relative;
   text-decoration: none;
+  font-size: 45px;
+  font-weight: 500;
+  color: #ffffff;
+  font-family: "mastodon-font-sans-serif",sans-serif;
 }
 
 .brand__tagline {
@@ -906,4 +909,13 @@ $small-breakpoint: 960px;
   &__text {
     color: $primary-text-color;
   }
+}
+
+.my-landing-logo {
+  width: 80px;
+  padding-right: 15px;
+}
+
+.my-margin-top {
+  margin-top: 15px;
 }

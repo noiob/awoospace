@@ -7,13 +7,48 @@
 
 .landing
   .landing__brand
+    = image_tag '/awoo logo.svg', class: 'my-landing-logo'
     = link_to root_url, class: 'brand' do
-      = svg_logo_full
-      %span.brand__tagline=t 'about.tagline'
+      = @site_hostname
 
   .landing__grid
     .landing__grid__column.landing__grid__column-registration
+      .hero-widget
+        .hero-widget__img
+          = image_tag @instance_presenter.hero&.file&.url || @instance_presenter.thumbnail&.file&.url || asset_pack_path('media/images/preview.jpg'), alt: @instance_presenter.site_title
+
+        .hero-widget__text
+          %p
+            = @instance_presenter.site_description.html_safe.presence || t('about.about_mastodon_html')
+          %p
+            = link_to about_more_path, class: 'button' do
+              = t('about.learn_more')
+              = fa_icon 'angle-double-right'
+
+        .hero-widget__footer
+          .hero-widget__footer__column
+            %h4= t 'about.administered_by'
+
+            = account_link_to @instance_presenter.contact_account
+
+          .hero-widget__footer__column
+            %h4= t 'about.server_stats'
+
+            %div{ style: 'display: flex' }
+              .hero-widget__counter{ style: 'width: 50%' }
+                %strong= number_to_human @instance_presenter.user_count, strip_insignificant_zeros: true
+                %span= t 'about.user_count_after', count: @instance_presenter.user_count
+              .hero-widget__counter{ style: 'width: 50%' }
+                %strong= number_to_human @instance_presenter.active_user_count, strip_insignificant_zeros: true
+                %span
+                  = t 'about.active_count_after'
+                  %abbr{ title: t('about.active_footnote') } *
+
+    .landing__grid__column.landing__grid__column-login
       .box-widget
+        = render 'login'
+
+      .box-widget{ class: 'my-margin-top' }
         = render 'registration'
 
       .directory
@@ -43,37 +78,3 @@
               = fa_icon 'tablet fw'
               = t('about.get_apps')
               %small= t('about.apps_platforms')
-
-    .landing__grid__column.landing__grid__column-login
-      .box-widget
-        = render 'login'
-
-      .hero-widget
-        .hero-widget__img
-          = image_tag @instance_presenter.hero&.file&.url || @instance_presenter.thumbnail&.file&.url || asset_pack_path('media/images/preview.jpg'), alt: @instance_presenter.site_title
-
-        .hero-widget__text
-          %p
-            = @instance_presenter.site_short_description.html_safe.presence || t('about.about_mastodon_html')
-            = link_to about_more_path do
-              = t('about.learn_more')
-              = fa_icon 'angle-double-right'
-
-        .hero-widget__footer
-          .hero-widget__footer__column
-            %h4= t 'about.administered_by'
-
-            = account_link_to @instance_presenter.contact_account
-
-          .hero-widget__footer__column
-            %h4= t 'about.server_stats'
-
-            .hero-widget__counters__wrapper
-              .hero-widget__counter
-                %strong= number_to_human @instance_presenter.user_count, strip_insignificant_zeros: true
-                %span= t 'about.user_count_after', count: @instance_presenter.user_count
-              .hero-widget__counter
-                %strong= number_to_human @instance_presenter.active_user_count, strip_insignificant_zeros: true
-                %span
-                  = t 'about.active_count_after'
-                  %abbr{ title: t('about.active_footnote') } *
