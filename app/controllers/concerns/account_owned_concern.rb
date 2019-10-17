@@ -4,7 +4,6 @@ module AccountOwnedConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!, if: -> { whitelist_mode? && request.format != :json }
     before_action :set_account, if: :account_required?
     before_action :check_account_approval, if: :account_required?
     before_action :check_account_suspension, if: :account_required?
