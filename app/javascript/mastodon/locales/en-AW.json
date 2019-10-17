@@ -1,0 +1,10 @@
+{
+  "compose_form.publish": "Awoo!",
+  "notification.favourite": "{name} booped your snoot",
+  "notification.favourite.name_and_others_with_link": "{name} and <a>{count, plural, one {# other} other {# others}}</a> booped your snoot",
+  "notification.follow": "{name} joined your pack",
+  "notification.follow.name_and_others": "{name} and <a>{count, plural, one {# other} other {# others}}</a> joined your pack",
+  "notification.mention": "{name} awooed at you",
+  "notification.reblog": "{name} joined your howl",
+  "notification.reblog.name_and_others_with_link": "{name} and <a>{count, plural, one {# other} other {# others}}</a> joined your howl"
+}
