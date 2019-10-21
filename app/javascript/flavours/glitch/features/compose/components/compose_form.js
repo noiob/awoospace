@@ -292,7 +292,8 @@ class ComposeForm extends ImmutablePureComponent {
 
     let disabledButton = isSubmitting || isUploading || isChangingUpload || (!text.trim().length && !anyMedia);
 
-    const countText = `${spoilerText}${countableText(text)}${advancedOptions && advancedOptions.get('do_not_federate') ? ' 🐺' : ''}`;
+    const countText=spoilerText ? '∞' : `${spoilerText}${countableText(text)}${advancedOptions && advancedOptions.get('do_not_federate') ? ' 🐺': ''}`;
+    const no_limit = spoilerText != '';
 
     return (
       <div className='composer'>
@@ -354,7 +355,7 @@ class ComposeForm extends ImmutablePureComponent {
             spoiler={spoilersAlwaysOn ? (spoilerText && spoilerText.length > 0) : spoiler}
           />
           <div className='compose--counter-wrapper'>
-            <CharacterCounter text={countText} max={maxChars} />
+            <CharacterCounter text={countText} max={maxChars} no_limit={no_limit} />
           </div>
         </div>
 
