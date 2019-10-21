@@ -6,6 +6,9 @@ class StatusLengthValidator < ActiveModel::Validator
   URL_PLACEHOLDER = "\1#{'x' * URL_PLACEHOLDER_CHARS}"
 
   def validate(status)
+    status.errors.add(:text, "hard limit of 16k exceeded") if status.text.length > 16384
+    status.errors.add(:text, "CW can't be longer than 500 characters") if status.spoiler_text.length > 500
+    return unless status.spoiler_text.blank?
     return unless status.local? && !status.reblog?
 
     @status = status
