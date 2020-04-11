@@ -1,6 +1,6 @@
 .simple_form__overlay-area{ class: (closed_registrations? && @instance_presenter.closed_registrations_message.present?) ? 'simple_form__overlay-area__blurred' : '' }
   = simple_form_for(new_user, url: user_registration_path, namespace: 'registration') do |f|
-    %p.lead= t('about.federation_hint_html', instance: content_tag(:strong, site_hostname))
+    %p.lead= t('about.federation_hint_html', instance: content_tag(:strong, site_hostname)) + ' (Federation is limited to servers on our allowlist.)'
 
     .fields-group
       = f.simple_fields_for :account do |account_fields|
@@ -13,7 +13,7 @@
     - if approved_registrations?
       .fields-group
         = f.simple_fields_for :invite_request do |invite_request_fields|
-          = invite_request_fields.input :text, as: :text, wrapper: :with_block_label, required: false
+          = invite_request_fields.input :text, as: :text, wrapper: :with_block_label, required: true, :hint => 'To get accepted, please mention your existing/previous fediverse account here in addition to a few words on why you want to join. If you do not have a fediverse account, please get a friend who is an active member of the community to direct message an admin or moderator for you.'
 
     .fields-group
       = f.input :agreement, as: :boolean, wrapper: :with_label, label: t('auth.checkbox_agreement_html', rules_path: about_more_path, terms_path: terms_path), disabled: closed_registrations?
