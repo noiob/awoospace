@@ -51,7 +51,7 @@ module Omniauthable
 
       user = User.find_by(email: email) if email_is_verified
 
-      return user unless user.nil?
+      return user unless user.nil? && !Identity.exists?(provider: auth.provider, user_id: user.id)
 
       user = User.new(user_params_from_auth(email, auth))
 
