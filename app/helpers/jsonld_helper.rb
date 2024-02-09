@@ -185,7 +185,11 @@ module JsonLdHelper
 
     # When the mime type is `application/ld+json`, we need to check the profile,
     # but `http.rb` does not parse it for us.
-    response.mime_type == 'application/ld+json' && response.headers[HTTP::Headers::CONTENT_TYPE]&.split(';')&.map(&:strip)&.include?('profile="https://www.w3.org/ns/activitystreams"')
+    return false unless response.mime_type == 'application/ld+json'
+
+    response.headers[HTTP::Headers::CONTENT_TYPE]&.split(';')&.map(&:strip)&.any? do |str|
+      str.start_with?('profile="') && str[9...-1].split.include?('https://www.w3.org/ns/activitystreams')
+    end
   end
 
   def body_to_json(body, compare_id: nil)
