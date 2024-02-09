@@ -19,18 +19,18 @@ module Omniauthable
   end
 
   class_methods do
-    def find_for_oauth(auth, signed_in_resource = nil)
+    def find_for_omniauth(auth, signed_in_resource = nil)
       # EOLE-SSO Patch
       auth.uid = (auth.uid[0][:uid] || auth.uid[0][:user]) if auth.uid.is_a? Hashie::Array
-      identity = Identity.find_for_oauth(auth)
+      identity = Identity.find_for_omniauth(auth)
 
       # If a signed_in_resource is provided it always overrides the existing user
       # to prevent the identity being locked with accidentally created accounts.
       # Note that this may leave zombie accounts (with no associated identity) which
       # can be cleaned up at a later date.
       user   = signed_in_resource || identity.user
-      user ||= reattach_for_oauth(auth)
-      user ||= create_for_oauth(auth)
+      user ||= reattach_for_auth(auth)
+      user ||= create_for_auth(auth)
 
       if identity.user.nil?
         identity.user = user
@@ -40,7 +40,9 @@ module Omniauthable
       user
     end
 
-    def reattach_for_oauth(auth)
+    private
+
+    def reattach_for_auth(auth)
       # If allowed, check if a user exists with the provided email address,
       # and return it if they does not have an associated identity with the
       # current authentication provider.
@@ -52,7 +54,7 @@ module Omniauthable
 
       return unless ENV['ALLOW_UNSAFE_AUTH_PROVIDER_REATTACH'] == 'true'
 
-      email, email_is_verified = email_from_oauth(auth)
+      email, email_is_verified = email_from_auth(auth)
       return unless email_is_verified
 
       user = User.find_by(email: email)
@@ -61,12 +63,12 @@ module Omniauthable
       user
     end
 
-    def create_for_oauth(auth)
+    def create_for_auth(auth)
       # Create a user for the given auth params. If no email was provided,
       # we assign a temporary email and ask the user to verify it on
       # the next step via Auth::SetupController.show
 
-      email, email_is_verified = email_from_oauth(auth)
+      email, email_is_verified = email_from_auth(auth)
 
       user = User.new(user_params_from_auth(email, auth))
 
@@ -76,9 +78,7 @@ module Omniauthable
       user
     end
 
-    private
-
-    def email_from_oauth(auth)
+    def email_from_auth(auth)
       strategy          = Devise.omniauth_configs[auth.provider.to_sym].strategy
       assume_verified   = strategy&.security&.assume_email_is_verified
       email_is_verified = auth.info.verified || auth.info.verified_email || auth.info.email_verified || assume_verified
