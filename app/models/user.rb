@@ -358,8 +358,11 @@ class User < ApplicationRecord
       # Revoke each access token for the Streaming API, since `update_all``
       # doesn't trigger ActiveRecord Callbacks:
       # TODO: #28793 Combine into a single topic
-      batch.each do |token|
-        redis.publish("timeline:access_token:#{token.id}", Oj.dump(event: :kill))
+      payload = Oj.dump(event: :kill)
+      redis.pipelined do |pipeline|
+        batch.ids.each do |id|
+          pipeline.publish("timeline:access_token:#{id}", payload)
+        end
       end
     end
   end

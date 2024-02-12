@@ -29,8 +29,13 @@ module ApplicationExtension
 
   def push_to_streaming_api
     # TODO: #28793 Combine into a single topic
-    access_tokens.in_batches.each do |token|
-      redis.publish("timeline:access_token:#{token.id}", Oj.dump(event: :kill))
+    payload = Oj.dump(event: :kill)
+    access_tokens.in_batches do |tokens|
+      redis.pipelined do |pipeline|
+        tokens.ids.each do |id|
+          pipeline.publish("timeline:access_token:#{id}", payload)
+        end
+      end
     end
   end
 end
