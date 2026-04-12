@@ -31,3 +31,6 @@ export const apiGetTranslationLanguages = () =>
 
 export const apiGetDomainBlocks = () =>
   apiRequestGet<ApiDomainBlockJSON[]>('v1/instance/domain_blocks');
+
+export const apiGetDomainAllows = () =>
+  apiRequestGet<string[]>('v1/instance/domain_allows');
