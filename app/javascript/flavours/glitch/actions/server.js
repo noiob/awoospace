@@ -18,6 +18,10 @@ export const SERVER_DOMAIN_BLOCKS_FETCH_REQUEST = 'SERVER_DOMAIN_BLOCKS_FETCH_RE
 export const SERVER_DOMAIN_BLOCKS_FETCH_SUCCESS = 'SERVER_DOMAIN_BLOCKS_FETCH_SUCCESS';
 export const SERVER_DOMAIN_BLOCKS_FETCH_FAIL    = 'SERVER_DOMAIN_BLOCKS_FETCH_FAIL';
 
+export const SERVER_DOMAIN_ALLOWS_FETCH_REQUEST = 'SERVER_DOMAIN_ALLOWS_FETCH_REQUEST';
+export const SERVER_DOMAIN_ALLOWS_FETCH_SUCCESS = 'SERVER_DOMAIN_ALLOWS_FETCH_SUCCESS';
+export const SERVER_DOMAIN_ALLOWS_FETCH_FAIL    = 'SERVER_DOMAIN_ALLOWS_FETCH_FAIL';
+
 export const fetchServer = () => (dispatch, getState) => {
   if (getState().getIn(['server', 'server', 'isLoading'])) {
     return;
@@ -135,5 +139,39 @@ const fetchDomainBlocksSuccess = (isAvailable, blocks) => ({
 
 const fetchDomainBlocksFail = error => ({
   type: SERVER_DOMAIN_BLOCKS_FETCH_FAIL,
+  error,
+});
+
+export const fetchDomainAllows = () => (dispatch, getState) => {
+  if (getState().getIn(['server', 'domainAllows', 'isLoading'])) {
+    return;
+  }
+
+  dispatch(fetchDomainAllowsRequest());
+
+  api()
+    .get('/api/v1/instance/domain_allows')
+    .then(({ data }) => dispatch(fetchDomainAllowsSuccess(true, data)))
+    .catch(err => {
+      if (err.response.status === 404) {
+        dispatch(fetchDomainAllowsSuccess(false, []));
+      } else {
+        dispatch(fetchDomainAllowsFail(err));
+      }
+    });
+};
+
+const fetchDomainAllowsRequest = () => ({
+  type: SERVER_DOMAIN_ALLOWS_FETCH_REQUEST,
+});
+
+const fetchDomainAllowsSuccess = (isAvailable, blocks) => ({
+  type: SERVER_DOMAIN_ALLOWS_FETCH_SUCCESS,
+  isAvailable,
+  blocks,
+});
+
+const fetchDomainAllowsFail = error => ({
+  type: SERVER_DOMAIN_ALLOWS_FETCH_FAIL,
   error,
 });

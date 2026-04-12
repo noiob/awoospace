@@ -13,6 +13,9 @@ import {
   SERVER_DOMAIN_BLOCKS_FETCH_REQUEST,
   SERVER_DOMAIN_BLOCKS_FETCH_SUCCESS,
   SERVER_DOMAIN_BLOCKS_FETCH_FAIL,
+  SERVER_DOMAIN_ALLOWS_FETCH_REQUEST,
+  SERVER_DOMAIN_ALLOWS_FETCH_SUCCESS,
+  SERVER_DOMAIN_ALLOWS_FETCH_FAIL,
 } from 'flavours/glitch/actions/server';
 
 const initialState = ImmutableMap({
@@ -25,6 +28,12 @@ const initialState = ImmutableMap({
   }),
 
   domainBlocks: ImmutableMap({
+    isLoading: false,
+    isAvailable: true,
+    items: ImmutableList(),
+  }),
+
+  domainAllows: ImmutableMap({
     isLoading: false,
     isAvailable: true,
     items: ImmutableList(),
@@ -57,6 +66,12 @@ export default function server(state = initialState, action) {
     return state.setIn(['domainBlocks', 'items'], fromJS(action.blocks)).setIn(['domainBlocks', 'isLoading'], false).setIn(['domainBlocks', 'isAvailable'], action.isAvailable);
   case SERVER_DOMAIN_BLOCKS_FETCH_FAIL:
     return state.setIn(['domainBlocks', 'isLoading'], false);
+  case SERVER_DOMAIN_ALLOWS_FETCH_REQUEST:
+    return state.setIn(['domainAllows', 'isLoading'], true);
+  case SERVER_DOMAIN_ALLOWS_FETCH_SUCCESS:
+    return state.setIn(['domainAllows', 'items'], fromJS(action.blocks)).setIn(['domainAllows', 'isLoading'], false).setIn(['domainAllows', 'isAvailable'], action.isAvailable);
+  case SERVER_DOMAIN_ALLOWS_FETCH_FAIL:
+    return state.setIn(['domainAllows', 'isLoading'], false);
   default:
     return state;
   }
