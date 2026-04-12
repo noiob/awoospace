@@ -5,6 +5,7 @@ import {
   fetchServerTranslationLanguages,
   fetchExtendedDescription,
   fetchDomainBlocks,
+  fetchDomainAllows
 } from 'mastodon/actions/server';
 import type {
   Server,
@@ -15,6 +16,7 @@ import {
   createServerFromServerJSON,
   createExtendedDescriptionFromServerJSON,
   createDomainBlockFromServerJSON,
+  createDomainAllowFromServerJSON,
 } from 'mastodon/models/server';
 
 interface State {
@@ -38,6 +40,12 @@ interface State {
     isAvailable: boolean;
     items: DomainBlock[];
   };
+  
+  domainAllows: {
+    isLoading: boolean;
+    isAvailable: boolean;
+    items: string[];
+  };
 }
 
 const initialState: State = {
@@ -57,6 +65,12 @@ const initialState: State = {
   },
 
   domainBlocks: {
+    isLoading: false,
+    isAvailable: true,
+    items: [],
+  },
+  
+  domainAllows: {
     isLoading: false,
     isAvailable: true,
     items: [],
@@ -123,5 +137,22 @@ export const serverReducer = createReducer(initialState, (builder) => {
   builder.addCase(fetchDomainBlocks.rejected, (state) => {
     state.domainBlocks.isLoading = false;
     state.domainBlocks.isAvailable = false;
+  });
+
+    builder.addCase(fetchDomainAllows.pending, (state) => {
+    state.domainAllows.isLoading = true;
+  });
+
+  builder.addCase(fetchDomainAllows.fulfilled, (state, action) => {
+    state.domainAllows.items = action.payload.map((obj) =>
+      createDomainAllowFromServerJSON(obj),
+    );
+    state.domainAllows.isLoading = false;
+    state.domainAllows.isAvailable = true;
+  });
+
+  builder.addCase(fetchDomainAllows.rejected, (state) => {
+    state.domainAllows.isLoading = false;
+    state.domainAllows.isAvailable = false;
   });
 });

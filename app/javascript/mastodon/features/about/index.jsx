@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { domain } from 'mastodon/initial_state';
 
 import { injectIntl } from '@/mastodon/components/intl';
-import { fetchServer, fetchExtendedDescription, fetchDomainBlocks  } from 'mastodon/actions/server';
+import { fetchServer, fetchExtendedDescription, fetchDomainBlocks, fetchDomainAllows } from 'mastodon/actions/server';
 import { Account } from 'mastodon/components/account';
 import Column from 'mastodon/components/column';
 import { NavigationFocusTarget } from 'mastodon/components/navigation_focus_target';
@@ -49,6 +49,7 @@ const mapStateToProps = state => ({
   locale: state.getIn(['meta', 'locale']),
   extendedDescription: state.server.extendedDescription,
   domainBlocks: state.server.domainBlocks,
+  domainAllows: state.server.domainAllows,
 });
 
 class About extends PureComponent {
@@ -58,6 +59,11 @@ class About extends PureComponent {
     locale: ImmutablePropTypes.string,
     extendedDescription: ImmutablePropTypes.map,
     domainBlocks: ImmutablePropTypes.contains({
+      isLoading: PropTypes.bool,
+      isAvailable: PropTypes.bool,
+      items: ImmutablePropTypes.list,
+    }),
+    domainAllows: ImmutablePropTypes.contains({
       isLoading: PropTypes.bool,
       isAvailable: PropTypes.bool,
       items: ImmutablePropTypes.list,
@@ -78,8 +84,13 @@ class About extends PureComponent {
     dispatch(fetchDomainBlocks());
   };
 
+  handleDomainAllowsOpen = () => {
+    const { dispatch } = this.props;
+    dispatch(fetchDomainAllows());
+  };
+
   render () {
-    const { multiColumn, intl, server, extendedDescription, domainBlocks, locale } = this.props;
+    const { multiColumn, intl, server, extendedDescription, domainBlocks, domainAllows, locale } = this.props;
     const isLoading = server.isLoading;
 
     return (
@@ -138,6 +149,34 @@ class About extends PureComponent {
           </Section>
 
           <RulesSection />
+
+          <Section title='Domain Allows' onOpen={this.handleDomainAllowsOpen}>
+            {domainAllows.isLoading ? (
+              <>
+                <Skeleton width='100%' />
+                <br />
+                <Skeleton width='70%' />
+              </>
+            ) : (domainAllows.isAvailable ? (
+              <>
+                <p>This instance is configured to federate with these domains. That means you can communicate with users using those instance, but not any other.</p>
+
+                {domainAllows.items.length > 0 && (
+                  <div className='about__domain-blocks'>
+                    {domainAllows.items.map(allow => (
+                      <div className='about__domain-blocks__domain' key={allow}>
+                        <div className='about__domain-blocks__domain__header'>
+                          <h6><a href={`https://${allow}`} style={{color: "var(--color-text-brand)"}}>{allow}</a></h6>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <p><FormattedMessage id='about.not_available' defaultMessage='This information has not been made available on this server.' /></p>
+            ))}
+          </Section>
 
           <Section title={intl.formatMessage(messages.blocks)} onOpen={this.handleDomainBlocksOpen}>
             {domainBlocks.isLoading ? (
