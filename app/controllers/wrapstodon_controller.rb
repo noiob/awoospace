@@ -9,7 +9,7 @@ class WrapstodonController < ApplicationController
 
   before_action :set_generated_annual_report
 
-  skip_before_action :require_functional!, only: :show, unless: :limited_federation_mode?
+  skip_before_action :require_functional!, only: :show
 
   def show
     expires_in 10.minutes, public: true if current_account.nil?

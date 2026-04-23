@@ -13,7 +13,7 @@ class CollectionsController < ApplicationController
   before_action :set_collection
 
   skip_around_action :set_locale, if: -> { request.format == :json }
-  skip_before_action :require_functional!, only: :show, unless: :limited_federation_mode?
+  skip_before_action :require_functional!, only: :show
 
   def show
     respond_to do |format|

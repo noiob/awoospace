@@ -8,7 +8,7 @@ class Api::V2::InstancesController < Api::BaseController
 
   # Override `current_user` to avoid reading session cookies unless in limited federation mode
   def current_user
-    super if limited_federation_mode?
+    super if false
   end
 
   def show

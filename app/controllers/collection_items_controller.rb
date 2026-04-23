@@ -12,7 +12,7 @@ class CollectionItemsController < ApplicationController
   before_action :set_collection_item
 
   skip_around_action :set_locale
-  skip_before_action :require_functional!, unless: :limited_federation_mode?
+  skip_before_action :require_functional!
 
   def show
     respond_to do |format|

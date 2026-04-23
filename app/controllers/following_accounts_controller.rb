@@ -10,7 +10,7 @@ class FollowingAccountsController < ApplicationController
   before_action :protect_hidden_collections, if: -> { request.format.json? }
 
   skip_around_action :set_locale, if: -> { request.format == :json }
-  skip_before_action :require_functional!, unless: :limited_federation_mode?
+  skip_before_action :require_functional!
 
   def index
     respond_to do |format|

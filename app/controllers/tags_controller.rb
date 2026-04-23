@@ -10,12 +10,12 @@ class TagsController < ApplicationController
   vary_by -> { public_fetch_mode? ? 'Accept, Accept-Language, Cookie' : 'Accept, Accept-Language, Cookie, Signature' }
 
   before_action :require_account_signature!, if: -> { request.format == :json && authorized_fetch_mode? }
-  before_action :authenticate_user!, if: :limited_federation_mode?
+  # before_action :authenticate_user!, if: :limited_federation_mode?
   before_action :set_local
   before_action :set_tag
   before_action :set_statuses, if: -> { request.format == :rss }
 
-  skip_before_action :require_functional!, unless: :limited_federation_mode?
+  skip_before_action :require_functional!
 
   def show
     respond_to do |format|

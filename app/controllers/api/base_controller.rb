@@ -11,7 +11,7 @@ class Api::BaseController < ApplicationController
   include Api::ErrorHandling
   include Api::Pagination
 
-  skip_before_action :require_functional!, unless: :limited_federation_mode?
+  skip_before_action :require_functional!
 
   before_action :require_authenticated_user!, if: :disallow_unauthenticated_api_access?
   before_action :require_not_suspended!

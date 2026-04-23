@@ -14,7 +14,7 @@ class ActivityPub::FeaturedCollectionsController < ApplicationController
   before_action :set_collections
 
   skip_around_action :set_locale
-  skip_before_action :require_functional!, unless: :limited_federation_mode?
+  skip_before_action :require_functional!
 
   def index
     respond_to do |format|

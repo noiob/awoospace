@@ -7,7 +7,7 @@ class Api::V1::Instances::PeersController < Api::V1::Instances::BaseController
 
   # Override `current_user` to avoid reading session cookies unless in limited federation mode
   def current_user
-    super if limited_federation_mode?
+    super if false
   end
 
   def index
@@ -18,6 +18,6 @@ class Api::V1::Instances::PeersController < Api::V1::Instances::BaseController
   private
 
   def require_enabled_api!
-    head 404 unless Setting.peers_api_enabled && !limited_federation_mode?
+    head 404 unless Setting.peers_api_enabled
   end
 end
