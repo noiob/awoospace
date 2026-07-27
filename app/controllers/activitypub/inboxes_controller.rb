@@ -6,7 +6,7 @@ class ActivityPub::InboxesController < ActivityPub::BaseController
   before_action :skip_large_payload
   before_action :skip_unknown_actor_activity
   before_action :require_actor_signature!
-  skip_before_action :authenticate_user!
+  #skip_before_action :authenticate_user!
 
   def create
     upgrade_account
