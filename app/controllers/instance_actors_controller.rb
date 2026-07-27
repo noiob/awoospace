@@ -7,7 +7,7 @@ class InstanceActorsController < ActivityPub::BaseController
 
   before_action :set_account
 
-  skip_before_action :authenticate_user! # From `AccountOwnedConcern`
+  # skip_before_action :authenticate_user! # From `AccountOwnedConcern`
   skip_before_action :require_functional!
   skip_before_action :update_user_sign_in
 
